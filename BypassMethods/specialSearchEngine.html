@@ -1,48 +1,141 @@
-<html>
-    <head>
-        <style>
-            iframe {
-                width: 100%;
-                height: 50%;
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Search with Obfuscation</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4CAF50;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
             }
-            input {
-                text-align: center;
-                align-self: center;
-                border-radius: 2pt;
-                width: 50%;
-                height: 50pt;
+
+            input[type="text"] {
+                padding: 12px;
             }
+
             button {
-                align-self: center;
-                width: 25%;
-                height: 25pt;
-                border-radius: 1.5pt;
+                padding: 10px;
+                font-size: 1rem;
             }
-        </style>
-    </head>
-    <body>
-        <script>
-            function search() {
-                let input = document.getElementById("user-search").value
-                let query = input.replace("/ /g", "+")
 
-                if (document.getElementById("Enable-Encryption").checked) {
-                    query = query.replace("\o\g","()")
-                    query = query.replace("\a\g","4")
-                    query = query.replace("\e\g","3")
-                    query = query.replace("\s\g","5")
-                    query = query.replace("\i\g","1")
-                    query = query.replace("\+\g","-")
-                    query = query.replace("\r\g","#")
-                }
-
-                window.open('https://www.qwant.com/?l=en&q='+query, '_blank');
+            h1 {
+                font-size: 1.4rem;
             }
-        </script>
+        }
+    </style>
+</head>
 
-        <input id="user-search" placeholder="Seach here"><br>
+<body>
+
+    <div class="container">
+        <h1>Search with Obfuscation</h1>
+        
+        <input type="text" id="user-search" placeholder="Search here"><br>
+        
         <button id="Search-Button" onclick="search()">Search</button><br>
-        <h1>enable obfuscation? May give inaccurate results but could patch different engine searching being counted.</h1>
-        <input type="checkbox" id="Enable-Encryption">
-    </body>
+        
+        <div class="checkbox-container">
+            <input type="checkbox" id="Enable-Encryption">
+            <label for="Enable-Encryption">Enable obfuscation? (May give inaccurate results)</label>
+        </div>
+    </div>
+
+    <script>
+        function search() {
+            let input = document.getElementById("user-search").value;
+            let query = input.replace(/\s+/g, "+"); // Corrected the regex for spaces
+
+            if (document.getElementById("Enable-Encryption").checked) {
+                query = query.replace(/o/g, "()");
+                query = query.replace(/a/g, "4");
+                query = query.replace(/e/g, "3");
+                query = query.replace(/s/g, "5");
+                query = query.replace(/i/g, "1");
+                query = query.replace(/\+/g, "-");
+                query = query.replace(/r/g, "#");
+            }
+
+            window.open('https://www.qwant.com/?l=en&q=' + query, '_blank');
+        }
+    </script>
+
+</body>
+
 </html>

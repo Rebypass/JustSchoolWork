@@ -1,0 +1,374 @@
+html {
+  scroll-behavior: smooth;
+}
+
+@media (min-width: 320px) {
+  body {
+    background: #dbdef5;
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: "Josefin Sans", sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 20px;
+  }
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+  overflow: hidden;
+}
+
+.clear {
+  clear: both;
+}
+
+@media (min-width: 320px) {
+  header {
+    height: 50px;
+    width: 100%;
+    background: white;
+  }
+  header #branding {
+    float: left;
+    margin-top: 5px;
+  }
+  header #branding img {
+    height: 50px;
+    width: 50px;
+    float: left;
+  }
+  header #branding h1 {
+    padding-top: 3px;
+    font-size: 30px;
+    margin: 5px 0 0 0;
+    float: right;
+  }
+  header nav {
+    float: right;
+    font-size: 30px;
+    margin: 5px 5px 0 0;
+  }
+  header nav #openbtn {
+    font-weight: normal;
+  }
+  header #overlay {
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    background: #6078ea;
+    text-align: center;
+    height: 0px;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    color: white;
+    font-weight: bolder;
+    z-index: 1;
+  }
+  header #overlay #closebtn {
+    position: absolute;
+    right: 20px;
+    font-size: 40px;
+    display: none;
+  }
+  header #overlay ul {
+    display: none;
+    list-style: none;
+    padding: 0;
+  }
+  header #overlay ul a {
+    text-decoration: none;
+    color: white;
+    line-height: 2.3em;
+  }
+}
+
+@media (min-width: 768px) {
+  header {
+    height: 60px;
+  }
+  header #branding {
+    margin-top: 10px;
+  }
+  header nav {
+    margin: 10px 5px 0 0;
+  }
+  header #overlay {
+    font-size: 22px;
+  }
+  header #overlay #closebtn {
+    right: 40px;
+    font-size: 50px;
+  }
+  header #overlay ul a {
+    line-height: 2.7em;
+  }
+}
+
+@media (min-width: 1024px) {
+  header #branding {
+    margin: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+  header #branding:hover {
+    cursor: pointer;
+  }
+  header #branding img {
+    height: 70px;
+    width: 70px;
+  }
+  header #branding h1 {
+    padding: 0;
+    font-size: 35px;
+    margin: 0;
+    margin-bottom: 3px;
+  }
+  header nav #openbtn {
+    font-size: 35px;
+  }
+  header nav #openbtn:hover {
+    cursor: pointer;
+  }
+  header #overlay #closebtn {
+    font-size: 55px;
+    right: 70px;
+  }
+  header #overlay #closebtn:hover {
+    cursor: pointer;
+  }
+  header #overlay ul a:hover::before {
+    content: "- ";
+  }
+  header #overlay ul a:hover::after {
+    content: " -";
+  }
+}
+
+@media (min-width: 320px) {
+  #showcase {
+    background: url("logo.png") no-repeat 50% 62px;
+    background-size: 200px 200px;
+    text-align: center;
+    height: 220px;
+    font-size: 25px;
+    border-bottom: 1px solid #909fee;
+  }
+  #showcase h1 {
+    margin-bottom: 20px;
+  }
+  #showcase a {
+    color: white;
+    font-weight: bold;
+    line-height: 2em;
+    padding: 10px 20px;
+    border-radius: 3px;
+    background: #6078ea;
+    text-decoration: none;
+  }
+}
+
+@media (min-width: 768px) {
+  #showcase {
+    height: 300px;
+    font-size: 28px;
+    background: url("logo.png") no-repeat 50% 93px;
+    background-size: 220px 220px;
+  }
+  #showcase h1 {
+    margin: 50px 0 70px 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  #showcase a:hover {
+    border: 2px solid white;
+    opacity: 0.8;
+  }
+}
+
+@media (min-width: 320px) {
+  #about {
+    height: 130px;
+    text-align: none;
+    background: #c2c9f3;
+    border-bottom: solid 1px #909fee;
+  }
+  #about p {
+    font-size: 25px;
+    margin: 20px 0 10px 0;
+  }
+  #about a {
+    line-height: 1.7em;
+    text-decoration: none;
+    padding: 10px 15px;
+    background: #909fee;
+    text-align: center;
+    color: white;
+    border-radius: 3px;
+    font-weight: bold;
+  }
+}
+
+@media (min-width: 768px) {
+  #about {
+    padding-left: 40px;
+  }
+  #about p {
+    margin: 25px 0 15px 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  #about {
+    text-align: center;
+    padding: 0;
+  }
+  #about p {
+    margin-bottom: 20px;
+  }
+  #about a:hover {
+    border: 1px solid white;
+    opacity: 0.8;
+  }
+}
+
+@media (min-width: 320px) {
+  #games {
+    text-align: center;
+  }
+  #games h1 {
+    margin-bottom: 0;
+  }
+  #games hr {
+    width: 200px;
+    border: 1px solid #9dabef;
+  }
+  #games #boxes {
+    height: 650px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: space-evenly;
+        -ms-flex-pack: space-evenly;
+            justify-content: space-evenly;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    margin-bottom: -150px;
+  }
+  #games .box {
+    width: 70%;
+    height: 30%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  #games .box #snakes {
+    display: none;
+  }
+  #games .box img {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+  }
+  #games .box p {
+    margin: 5px 0;
+  }
+  #games .game h5 {
+    margin: 0;
+    font-weight: normal;
+  }
+}
+
+@media (min-width: 768px) {
+  #games #boxes {
+    height: 250px;
+    width: 900px;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    margin: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  #games #boxes {
+    padding: 0;
+    width: 100%;
+  }
+  #games .box .game {
+    cursor: pointer;
+  }
+  #games .box .game:hover {
+    opacity: 0.7;
+  }
+  #games .box #snakes {
+    display: block;
+  }
+}
+
+@media (min-width: 320px) {
+  footer {
+    height: 50px;
+    font-size: 15px;
+    background: #909fee;
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+
+@media (min-width: 768px) {
+  footer {
+    height: 60px;
+    font-size: 21px;
+    background: #909fee;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+/*# sourceMappingURL=style.css.map */

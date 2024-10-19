@@ -1,0 +1,133 @@
+@media (min-width: 320px) {
+  header {
+    height: 50px;
+    width: 100%;
+    background: white;
+    #branding {
+      float: left;
+      margin-top: 5px;
+      img {
+        height: 50px;
+        width: 50px;
+        float: left;
+      }
+      h1 {
+        padding-top: 3px;
+        font-size: 30px;
+        margin: 5px 0 0 0;
+        float: right;
+      }
+    }
+
+    nav {
+      float: right;
+      font-size: 30px;
+      margin: 5px 5px 0 0;
+      #openbtn {
+        font-weight: normal;
+      }
+    }
+
+    #overlay {
+      width: 100%;
+      position: fixed;
+      top: 0px;
+      background: $color1;
+      text-align: center;
+      height: 0px;
+      transition: 0.5s;
+      color: white;
+      font-weight: bolder;
+      z-index: 1;
+      #closebtn {
+        position: absolute;
+        right: 20px;
+        font-size: 40px;
+        display: none;
+      }
+      ul {
+        display: none;
+        list-style: none;
+        padding: 0;
+        a {
+          text-decoration: none;
+          color: white;
+          line-height: 2.3em;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 768px) {
+  header {
+    height: 60px;
+    #branding {
+      margin-top: 10px;
+    }
+    nav {
+      margin: 10px 5px 0 0;
+    }
+    #overlay {
+      font-size: 22px;
+      #closebtn {
+        right: 40px;
+        font-size: 50px;
+      }
+      ul {
+        a {
+          line-height: 2.7em;
+        }
+      }
+    }
+  }
+}
+@media (min-width: 1024px) {
+  header {
+    #branding {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:hover {
+        cursor: pointer;
+      }
+      img {
+        height: 70px;
+        width: 70px;
+      }
+      h1 {
+        padding: 0;
+        font-size: 35px;
+        margin: 0;
+        margin-bottom: 3px;
+      }
+    }
+    nav {
+      #openbtn {
+        font-size: 35px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    #overlay {
+      #closebtn {
+        font-size: 55px;
+        right: 70px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      ul {
+        a:hover {
+          &::before {
+            content: "- ";
+          }
+          &::after {
+            content: " -";
+          }
+        }
+      }
+    }
+  }
+}

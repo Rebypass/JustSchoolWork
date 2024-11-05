@@ -129,93 +129,64 @@ var pstSelf = { w: pst_w, b: pst_b };
  * Evaluates the board at this point in time,
  * using the material weights and piece square tables.
  */
-function evaluateBoard(game, move, prevSum, color) {
-
-  if (game.in_checkmate()) {
-
-    // Opponent is in checkmate (good for us)
-    if (move.color === color) {
-      return 10 ** 10;
-    }
-    // Our king's in checkmate (bad for us)
-    else {
-      return -(10 ** 10);
+function isPassedPawn(game, position, color) {
+  const file = position[1];
+  const rank = position[0];
+  const directions = color === 'w' ? 1 : -1; // White pawns move up, black pawns move down
+  
+  for (let i = -1; i <= 1; i++) {  // Check the file and adjacent files
+    const adjFile = file + i;
+    if (adjFile < 0 || adjFile > 7) continue; // Ignore out-of-bounds files
+    
+    // Scan ranks ahead of the pawn in the same column or adjacent columns
+    for (let r = rank + directions; r >= 0 && r <= 7; r += directions) {
+      const piece = game.get(r, adjFile);
+      if (piece && piece.type === 'p' && piece.color !== color) {
+        return false; // Opponent pawn is blocking or can block this pawn
+      }
     }
   }
+  return true;
+}
 
-  if (game.in_draw() || game.in_threefold_repetition() || game.in_stalemate())
-  {
+function evaluateBoard(game, move, prevSum, color) {
+  if (game.in_checkmate()) {
+    return move.color === color ? 10 ** 10 : -(10 ** 10);
+  }
+  
+  if (game.in_draw() || game.in_threefold_repetition() || game.in_stalemate()) {
     return 0;
   }
 
   if (game.in_check()) {
-    // Opponent is in check (good for us)
-    if (move.color === color) {
-      prevSum += 50;
-    }
-    // Our king's in check (bad for us)
-    else {
-      prevSum -= 50;
-    }
+    prevSum += move.color === color ? 50 : -50;
   }
 
-  var from = [
-    8 - parseInt(move.from[1]),
-    move.from.charCodeAt(0) - 'a'.charCodeAt(0),
-  ];
-  var to = [
-    8 - parseInt(move.to[1]),
-    move.to.charCodeAt(0) - 'a'.charCodeAt(0),
-  ];
+  const from = [8 - parseInt(move.from[1]), move.from.charCodeAt(0) - 'a'.charCodeAt(0)];
+  const to = [8 - parseInt(move.to[1]), move.to.charCodeAt(0) - 'a'.charCodeAt(0)];
 
-  // Change endgame behavior for kings
-  if (prevSum < -1500) {
-    if (move.piece === 'k') {
-      move.piece = 'k_e';
-    }
-    // Kings can never be captured
-    // else if (move.captured === 'k') {
-    //   move.captured = 'k_e';
-    // }
+  if (prevSum < -1500 && move.piece === 'k') {
+    move.piece = 'k_e';
   }
 
   if ('captured' in move) {
-    // Opponent piece was captured (good for us)
     if (move.color === color) {
-      prevSum +=
-        weights[move.captured] +
-        pstOpponent[move.color][move.captured][to[0]][to[1]];
-    }
-    // Our piece was captured (bad for us)
-    else {
-      prevSum -=
-        weights[move.captured] +
-        pstSelf[move.color][move.captured][to[0]][to[1]];
+      prevSum += weights[move.captured] + pstOpponent[move.color][move.captured][to[0]][to[1]];
+    } else {
+      prevSum -= weights[move.captured] + pstSelf[move.color][move.captured][to[0]][to[1]];
     }
   }
 
   if (move.flags.includes('p')) {
-    // NOTE: promote to queen for simplicity
     move.promotion = 'q';
-
-    // Our piece was promoted (good for us)
     if (move.color === color) {
-      prevSum -=
-        weights[move.piece] + pstSelf[move.color][move.piece][from[0]][from[1]];
-      prevSum +=
-        weights[move.promotion] +
-        pstSelf[move.color][move.promotion][to[0]][to[1]];
-    }
-    // Opponent piece was promoted (bad for us)
-    else {
-      prevSum +=
-        weights[move.piece] + pstSelf[move.color][move.piece][from[0]][from[1]];
-      prevSum -=
-        weights[move.promotion] +
-        pstSelf[move.color][move.promotion][to[0]][to[1]];
+      prevSum -= weights[move.piece] + pstSelf[move.color][move.piece][from[0]][from[1]];
+      prevSum += weights[move.promotion] + pstSelf[move.color][move.promotion][to[0]][to[1]];
+    } else {
+      prevSum += weights[move.piece] + pstSelf[move.color][move.piece][from[0]][from[1]];
+      prevSum -= weights[move.promotion] + pstSelf[move.color][move.promotion][to[0]][to[1]];
     }
   } else {
-    // The moved piece still exists on the updated board, so we only need to update the position value
     if (move.color !== color) {
       prevSum += pstSelf[move.color][move.piece][from[0]][from[1]];
       prevSum -= pstSelf[move.color][move.piece][to[0]][to[1]];
@@ -225,8 +196,17 @@ function evaluateBoard(game, move, prevSum, color) {
     }
   }
 
+  // Passed pawn evaluation
+  if (move.piece === 'p') {
+    const isPassed = isPassedPawn(game, to, move.color);
+    if (isPassed) {
+      prevSum += move.color === color ? 100 : -100;  // Adjust the value based on your preference
+    }
+  }
+
   return prevSum;
 }
+
 
 /*
  * Performs the minimax algorithm to choose the best move: https://en.wikipedia.org/wiki/Minimax (pseudocode provided)
@@ -337,17 +317,17 @@ function checkStatus(color) {
 function updateAdvantage() {
   if (globalSum > 0) {
     $('#advantageColor').text('Black');
-    $('#advantageNumber').text(globalSum);
+    $('#advantageNumber').text(globalSum/100);
   } else if (globalSum < 0) {
     $('#advantageColor').text('White');
-    $('#advantageNumber').text(-globalSum);
+    $('#advantageNumber').text(-globalSum /100);
   } else {
     $('#advantageColor').text('Neither side');
     $('#advantageNumber').text(globalSum);
   }
   $('#advantageBar').attr({
     'aria-valuenow': `${-globalSum}`,
-    style: `width: ${((-globalSum + 2000) / 4000) * 100}%`,
+    style: `width: ${((-globalSum + 2000) / 4000) *100}%`,
   });
 }
 
@@ -518,22 +498,7 @@ function undo() {
 }
 
 $('#undoBtn').on('click', function () {
-  if (game.history().length >= 2) {
-    $board.find('.' + squareClass).removeClass('highlight-white');
-    $board.find('.' + squareClass).removeClass('highlight-black');
-    $board.find('.' + squareClass).removeClass('highlight-hint');
-
-    // Undo twice: Opponent's latest move, followed by player's latest move
-    undo();
-    window.setTimeout(function () {
-      undo();
-      window.setTimeout(function () {
-        showHint();
-      }, 250);
-    }, 250);
-  } else {
-    alert('Nothing to undo.');
-  }
+  alert("You thought")
 });
 
 function redo() {
@@ -542,22 +507,11 @@ function redo() {
 }
 
 $('#redoBtn').on('click', function () {
-  if (undo_stack.length >= 2) {
-    // Redo twice: Player's last move, followed by opponent's last move
-    redo();
-    window.setTimeout(function () {
-      redo();
-      window.setTimeout(function () {
-        showHint();
-      }, 250);
-    }, 250);
-  } else {
-    alert('Nothing to redo.');
-  }
+  alert("You thought")
 });
 
 $('#showHint').change(function () {
-  window.setTimeout(showHint, 250);
+  alert("You thought")
 });
 
 function showHint() {

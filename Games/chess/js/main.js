@@ -14,6 +14,37 @@ var globalSum = 0; // always from black's perspective. Negative for white's pers
 var whiteSquareGrey = '#a9a9a9';
 var blackSquareGrey = '#696969';
 
+opening_book = {
+  "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1": {
+      "e2e4": {
+          "e7e5": {
+              "f1c4": {
+                  "c7c5": {
+                      "g1f3": {
+                          "g7g6": {
+                              "d2d4": 1
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  },
+  "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1": {
+      "e7e5": {
+          "f1c4": {
+              "c7c5": {
+                  "g1f3": {
+                      "g7g6": {
+                          "d2d4": 1
+                      }
+                  }
+              }
+          }
+      }
+  }
+}
+
 var squareClass = 'square-55d63';
 var squareToHighlight = null;
 var colorToHighlight = null;
@@ -38,6 +69,7 @@ timer = null;
  */
 
 var weights = { p: 100, n: 280, b: 320, r: 479, q: 929, k: 60000, k_e: 60000 };
+
 var pst_w = {
   p: [
     [100, 100, 100, 100, 105, 100, 100, 100],
@@ -112,6 +144,27 @@ var pst_w = {
     [-50, -30, -30, -30, -30, -30, -30, -50],
   ],
 };
+
+function randomizePST(pst, range = 5) {
+  // Create a deep copy of the pst object to avoid modifying the original
+  let newPST = JSON.parse(JSON.stringify(pst));
+  
+  // Iterate over each piece type in the pst
+  for (let piece in newPST) {
+    for (let row = 0; row < newPST[piece].length; row++) {
+      for (let col = 0; col < newPST[piece][row].length; col++) {
+        // Generate a small random number in the range [-range, range]
+        let randomChange = Math.floor(Math.random() * (2 * range + 1)) - range;
+        // Apply the change to the current value
+        newPST[piece][row][col] += randomChange;
+      }
+    }
+  }
+  return newPST;
+}
+
+pst_w = randomizePST(pst_w, 3);  // Adjust range as needed
+
 var pst_b = {
   p: pst_w['p'].slice().reverse(),
   n: pst_w['n'].slice().reverse(),
@@ -124,6 +177,7 @@ var pst_b = {
 
 var pstOpponent = { w: pst_b, b: pst_w };
 var pstSelf = { w: pst_w, b: pst_b };
+
 
 /*
  * Evaluates the board at this point in time,
@@ -159,7 +213,7 @@ function evaluateBoard(game, move, prevSum, color) {
   }
 
   if (game.in_check()) {
-    prevSum += move.color === color ? 50 : -50;
+    prevSum += move.color === color ? 5 : -5;
   }
 
   const from = [8 - parseInt(move.from[1]), move.from.charCodeAt(0) - 'a'.charCodeAt(0)];
@@ -200,7 +254,7 @@ function evaluateBoard(game, move, prevSum, color) {
   if (move.piece === 'p') {
     const isPassed = isPassedPawn(game, to, move.color);
     if (isPassed) {
-      prevSum += move.color === color ? 100 : -100;  // Adjust the value based on your preference
+      prevSum += move.color === color ? 20 : -20;  // Adjust the value based on your preference
     }
   }
 
@@ -225,7 +279,20 @@ function evaluateBoard(game, move, prevSum, color) {
  * Output:
  *  the best move at the root of the current subtree.
  */
+
 function minimax(game, depth, alpha, beta, isMaximizingPlayer, sum, color) {
+
+  const fen = game.fen();
+    if (fen in opening_book) {
+        const currentColor = game.turn();
+        const bookColor = fen.split(' ')[1]; // Extract color from FEN
+
+        if (currentColor === bookColor) {
+            const bestMove = opening_book[fen];
+            return [bestMove, evaluateBoard(game, bestMove, currSum, color)];
+        }
+    }
+
   positionCount++;
   var children = game.ugly_moves({ verbose: true });
 
@@ -247,7 +314,6 @@ function minimax(game, depth, alpha, beta, isMaximizingPlayer, sum, color) {
   for (var i = 0; i < children.length; i++) {
     currMove = children[i];
 
-    // Note: in our case, the 'children' are simply modified game states
     var currPrettyMove = game.ugly_move(currMove);
     var newSum = evaluateBoard(game, currPrettyMove, sum, color);
     var [childBestMove, childValue] = minimax(
@@ -276,6 +342,7 @@ function minimax(game, depth, alpha, beta, isMaximizingPlayer, sum, color) {
         bestMove = currPrettyMove;
       }
       if (childValue < beta) {
+        //updateKillerMoves(move, depth);
         beta = childValue;
       }
     }
@@ -285,7 +352,7 @@ function minimax(game, depth, alpha, beta, isMaximizingPlayer, sum, color) {
       break;
     }
   }
-
+  
   if (isMaximizingPlayer) {
     return [bestMove, maxValue];
   } else {

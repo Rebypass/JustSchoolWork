@@ -23,6 +23,19 @@ startingScore = gameData.score;
 function saveGameData() {
   localStorage.setItem("gameData", JSON.stringify(gameData));
 }
+
+/*
+if (gameData.banned) {
+  alert("You've been banned.")
+  while (true) {}
+}
+
+function ban() {
+  gameData.banned = true
+  saveGameData()
+  alert("You've been banned.")
+  while (true) {}
+}*/
   
   // Display the loaded score and upgrade cost
   document.getElementById("score").innerText = `Score: ${gameData.score}`;
@@ -59,7 +72,7 @@ function saveGameData() {
   
       // Update the displayed score and upgrade cost
       document.getElementById("score").innerText = `Score: ${gameData.score}`;
-      document.getElementById("upgradeCost").innerText = `Upgrade Cost: ${gameData.upgradeCost2}`;
+      document.getElementById("upgradeCost2").innerText = `Upgrade Cost: ${gameData.upgradeCost2}`;
       saveGameData();  // Save game data to localStorage
     }
   });

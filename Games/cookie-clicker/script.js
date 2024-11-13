@@ -8,6 +8,7 @@ var gameData = {
   upgradeCost2: 100,
 };
 
+var startingScore = 0;
 var csscore = 0;
 var timeOpen = 0;
 
@@ -16,6 +17,7 @@ const savedData = JSON.parse(localStorage.getItem("gameData") || "{}");
 
 // Merge saved data with default gameData, keeping any new properties in gameData
 gameData = { ...gameData, ...savedData };
+startingScore = gameData.score;
 
 // Function to save gameData to localStorage
 function saveGameData() {
@@ -68,13 +70,15 @@ function saveGameData() {
 
     if (csscore != 0) {
       cps = csscore/timeOpen;
+      changePerSecond = (gameData.score-startingScore)/timeOpen
 
-      if (cps >= 10) {
-        gameData.score-=500
-        alert("You've been punished for using an auto clicker!")
+      if (changePerSecond >= (10*gameData.cookiesPerClick)+(gameData.cookiesPerSecond)) {
+        gameData.score=0
+      } else if (cps >= 10) {
+        gameData.score-=250*gameData.cookiesPerClick
       }
 
-      console.log(cps)
+      console.log(changePerSecond)
     }
 
     if (parseInt(gameData.cookiesPerSecond) != 0) {

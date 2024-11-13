@@ -1,32 +1,36 @@
 // Initialize game data with score, clicks, cookies per click, and upgrade cost
-let gameData = {
-    score: 0,
-    clicks: 0,
-    cookiesPerClick: 1,  // Initial cookies per click
-    cookiesPerSecond: 0,
-    upgradeCost: 50,      // Initial cost of the upgrade
-    upgradeCost2: 100,
-  };
-  
-  // Load the game data from localStorage
-  const savedData = localStorage.getItem("gameData");
-  if (savedData) {
-    gameData = JSON.parse(savedData);
-  }
+var gameData = {
+  score: 0,
+  clicks: 0,
+  cookiesPerClick: 1,
+  cookiesPerSecond: 0,
+  upgradeCost: 50,
+  upgradeCost2: 100,
+};
+
+var csscore = 0;
+var timeOpen = 0;
+
+// Load the game data from localStorage
+const savedData = JSON.parse(localStorage.getItem("gameData") || "{}");
+
+// Merge saved data with default gameData, keeping any new properties in gameData
+gameData = { ...gameData, ...savedData };
+
+// Function to save gameData to localStorage
+function saveGameData() {
+  localStorage.setItem("gameData", JSON.stringify(gameData));
+}
   
   // Display the loaded score and upgrade cost
   document.getElementById("score").innerText = `Score: ${gameData.score}`;
   document.getElementById("upgradeCost").innerText = `Upgrade Cost: ${gameData.upgradeCost}`;
   
-  // Function to save game data to localStorage
-  function saveGameData() {
-    localStorage.setItem("gameData", JSON.stringify(gameData));
-  }
-  
   // Event listener for clicking the cookie
   document.getElementById("cookie").addEventListener("click", () => {
     gameData.score += gameData.cookiesPerClick;  // Add cookies based on cookiesPerClick
     gameData.clicks++;
+    csscore++;
     document.getElementById("score").innerText = `Score: ${gameData.score}`;
     saveGameData();  // Save game data to localStorage
   });
@@ -45,10 +49,9 @@ let gameData = {
     }
   });
 
-  /*
   document.getElementById("upgradeBtn2").addEventListener("click", () => {
     if (gameData.score >= gameData.upgradeCost2) {  // Check if player has enough cookies
-      gameData.score -= gameData.upgradeCost2;       // Deduct cost from score
+      gameData.score = gameData.score - gameData.upgradeCost2;       // Deduct cost from score
       gameData.cookiesPerSecond++;                   // Increase cookies per click
       gameData.upgradeCost2 = Math.floor(gameData.upgradeCost2 * 1.5);  // Increase upgrade cost
   
@@ -60,12 +63,24 @@ let gameData = {
   });
 
   setInterval(function() {
-    if (gameData.cookiesPerSecond > 0) {
-        return
+    
+    timeOpen++;
+
+    if (csscore != 0) {
+      cps = csscore/timeOpen;
+
+      if (cps >= 10) {
+        gameData.score-=500
+        alert("You've been punished for using an auto clicker!")
+      }
+
+      console.log(cps)
     }
 
-    gameData.score+=gameData.cookiesPerSecond;
-    gameData.clicks+=gameData.cookiesPerSecond;
-    document.getElementById("score").innerText = `Score: ${gameData.score}`;
-    saveGameData();  // Save game data to localStorage
-  },1000)*/
+    if (parseInt(gameData.cookiesPerSecond) != 0) {
+      console.log(gameData.cookiesPerSecond)
+      gameData.score= gameData.score+parseInt(gameData.cookiesPerSecond);
+      document.getElementById("score").innerText = `Score: ${gameData.score}`;
+      saveGameData();  // Save game data to localStorage
+    }
+  },1000)

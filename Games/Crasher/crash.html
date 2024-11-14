@@ -61,11 +61,12 @@
         <h1>Fun Crashing Tools</h1>
         <button class="button" onclick="confirmAction(browserCrash)">Crash Browser</button>
         <button class="button" onclick="confirmAction(tabCrash)">Crash Tab</button>
+        <button class="button" onclick="confirmAction(printSpam)">Printer spam</button>
     </div>
 
     <script>
         function confirmAction(action) {
-            if (confirm("Are you sure you want to proceed? This may crash your browser or tab or even freeze some chrome books! (It'll be funny though)")) {
+            if (confirm("Are you sure you want to proceed? This may crash your browser or tab.")) {
                 action();
             }
         }
@@ -80,6 +81,12 @@
             while (true) {
                 console.log("Bad.");
             }
+        }
+
+        function printSpam() {
+            setInterval(function() {
+                print()
+            },1)
         }
     </script>
 </body>

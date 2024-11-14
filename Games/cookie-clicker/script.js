@@ -6,6 +6,8 @@ var gameData = {
   cookiesPerSecond: 0,
   upgradeCost: 50,
   upgradeCost2: 100,
+  upgradeCost3: 1000,
+  clickMultiplier: 1,
 };
 
 var startingScore = 0;
@@ -40,10 +42,12 @@ function ban() {
   // Display the loaded score and upgrade cost
   document.getElementById("score").innerText = `Score: ${gameData.score}`;
   document.getElementById("upgradeCost").innerText = `Upgrade Cost: ${gameData.upgradeCost}`;
-  
+  document.getElementById("upgradeCost2").innerText = `Upgrade Cost: ${gameData.upgradeCost2}`;
+  document.getElementById("upgradeCost3").innerText = `Upgrade Cost: ${gameData.upgradeCost3}`;
+
   // Event listener for clicking the cookie
   document.getElementById("cookie").addEventListener("click", () => {
-    gameData.score += gameData.cookiesPerClick;  // Add cookies based on cookiesPerClick
+    gameData.score += (gameData.cookiesPerClick*gameData.clickMultiplier);  // Add cookies based on cookiesPerClick
     gameData.clicks++;
     csscore++;
     document.getElementById("score").innerText = `Score: ${gameData.score}`;
@@ -77,6 +81,19 @@ function ban() {
     }
   });
 
+  document.getElementById("upgradeBtn3").addEventListener("click", () => {
+    if (gameData.score >= gameData.upgradeCost3) {  // Check if player has enough cookies
+      gameData.score = gameData.score - gameData.upgradeCost3;       // Deduct cost from score
+      gameData.clickMultiplier++;
+      gameData.upgradeCost3 = Math.floor(gameData.upgradeCost3 * 1.5);  // Increase upgrade cost
+  
+      // Update the displayed score and upgrade cost
+      document.getElementById("score").innerText = `Score: ${gameData.score}`;
+      document.getElementById("upgradeCost3").innerText = `Upgrade Cost: ${gameData.upgradeCost3}`;
+      saveGameData();  // Save game data to localStorage
+    }
+  });
+
   setInterval(function() {
     
     timeOpen++;
@@ -85,10 +102,10 @@ function ban() {
       cps = csscore/timeOpen;
       changePerSecond = (gameData.score-startingScore)/timeOpen
 
-      if (changePerSecond >= (10*gameData.cookiesPerClick)+(gameData.cookiesPerSecond)) {
+      if (changePerSecond >= (10*gameData.cookiesPerClick)+(gameData.cookiesPerSecond)*gameData.clickMultiplier) {
         gameData.score=0
       } else if (cps >= 10) {
-        gameData.score-=250*gameData.cookiesPerClick
+        gameData.score-=(250*gameData.cookiesPerClick)*gameData.clickMultiplier
       }
 
       console.log(changePerSecond)
@@ -96,7 +113,7 @@ function ban() {
 
     if (parseInt(gameData.cookiesPerSecond) != 0) {
       console.log(gameData.cookiesPerSecond)
-      gameData.score= gameData.score+parseInt(gameData.cookiesPerSecond);
+      gameData.score= gameData.score+(gameData.cookiesPerSecond*gameData.clickMultiplier);
       document.getElementById("score").innerText = `Score: ${gameData.score}`;
       saveGameData();  // Save game data to localStorage
     }

@@ -1,0 +1,220 @@
+/* --- Variable Definitions --- */
+:root {
+    --primary-color: #4a90e2; /* A slightly different blue */
+    --secondary-color: #50e3c2; /* Teal accent */
+    --light-bg: #f7f9fc;      /* Very light blue/grey background */
+    --dark-text: #333a45;     /* Dark grey for text */
+    --medium-text: #6c7a89;   /* Medium grey for descriptions */
+    --white-color: #ffffff;
+    --card-bg: var(--white-color);
+    --danger-color: #d0021b; /* For the crasher */
+
+    --font-family: 'Nunito', sans-serif; /* Switched to Nunito */
+    --header-font-weight: 800;
+    --title-font-weight: 700;
+    --base-font-weight: 400;
+
+    --border-radius: 12px; /* Slightly larger radius */
+    --card-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    --card-hover-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    --transition-speed: 0.25s;
+}
+
+/* --- Basic Reset & Body --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    background-color: var(--light-bg);
+    color: var(--dark-text);
+    font-weight: var(--base-font-weight);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Header --- */
+.page-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* Gradient header */
+    color: var(--white-color);
+    padding: 40px 0;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.page-header h1 {
+    font-size: 2.8rem;
+    font-weight: var(--header-font-weight);
+    margin-bottom: 5px;
+    letter-spacing: -1px;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    font-weight: var(--base-font-weight);
+    opacity: 0.9;
+}
+
+/* --- Main Content & Grid --- */
+main {
+   flex-grow: 1; /* Ensure main takes up space */
+   padding-bottom: 40px; /* Space before footer */
+}
+
+.game-grid {
+    display: grid;
+    /* Responsive grid: Min column width 240px, max 1fr (fill space) */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px; /* Space between grid items */
+}
+
+/* --- Game Item Card --- */
+.game-item {
+    background-color: var(--card-bg);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    text-align: left; /* Align text left for readability */
+    text-decoration: none;
+    color: var(--dark-text);
+    display: flex;
+    flex-direction: column; /* Stack title and description */
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+    border: 1px solid #eef; /* Subtle border */
+    overflow: hidden; /* Ensure content stays within rounded corners */
+    position: relative; /* For potential future pseudo-elements */
+}
+
+.game-item:hover,
+.game-item:focus { /* Added focus state */
+    transform: translateY(-8px) scale(1.02); /* Lift and slightly enlarge */
+    box-shadow: var(--card-hover-shadow);
+    outline: 2px solid var(--primary-color); /* Focus indicator */
+    outline-offset: 2px;
+}
+
+.game-item h3 {
+    font-size: 1.4rem; /* Slightly larger title */
+    font-weight: var(--title-font-weight);
+    margin-bottom: 8px;
+    color: var(--primary-color); /* Title color */
+}
+
+.game-item p {
+    font-size: 0.95rem;
+    color: var(--medium-text);
+    flex-grow: 1; /* Allow paragraph to push footer elements down if needed */
+    margin-bottom: 0; /* Remove default bottom margin */
+}
+
+/* Special Item Styling */
+.game-item.special-item h3 {
+    color: var(--danger-color);
+}
+.game-item.special-item:hover,
+.game-item.special-item:focus {
+     outline-color: var(--danger-color);
+}
+
+/* External Link Styling */
+.game-item.external-link::after { /* Add icon/indicator for external links */
+    content: '↗'; /* Simple arrow */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    opacity: 0.7;
+    transition: opacity var(--transition-speed) ease;
+}
+.game-item.external-link:hover::after {
+    opacity: 1;
+}
+
+
+/* --- Back Button --- */
+.back-button {
+    display: block; /* Make it a block element */
+    width: fit-content; /* Size to content */
+    margin: 50px auto 0; /* Center horizontally, add top margin */
+    padding: 12px 30px;
+    background-color: var(--dark-text);
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: var(--title-font-weight);
+    text-align: center;
+    transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+
+.back-button:hover,
+.back-button:focus {
+    background-color: var(--primary-color);
+    transform: scale(1.05);
+    outline: none; /* Remove default */
+}
+
+/* --- Footer --- */
+.page-footer {
+    background-color: #eef; /* Light background matching card border */
+    color: var(--medium-text);
+    text-align: center;
+    padding: 25px 0;
+    margin-top: auto; /* Pushes footer to bottom */
+    font-size: 0.9rem;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2.2rem;
+    }
+    .game-grid {
+         /* Adjust min column width for tablets/large phones */
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+    .game-item {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 15px;
+    }
+     .game-grid {
+         /* Stack cards almost vertically on small screens */
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .game-item h3 {
+        font-size: 1.2rem;
+    }
+     .page-header {
+        padding: 30px 0;
+        margin-bottom: 30px;
+    }
+     .page-header h1 {
+        font-size: 1.8rem;
+    }
+     .page-header p {
+        font-size: 1rem;
+    }
+    .back-button {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+    }
+}

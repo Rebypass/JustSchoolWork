@@ -1,0 +1,210 @@
+/* --- Variable Definitions --- */
+:root {
+    --primary-color: #007bff; /* A modern blue */
+    --secondary-color: #6c757d; /* A muted grey */
+    --light-color: #f8f9fa;   /* Very light grey / off-white */
+    --dark-color: #343a40;    /* Dark grey */
+    --white-color: #ffffff;
+    --font-family: 'Poppins', sans-serif;
+    --header-font-weight: 700;
+    --base-font-weight: 400;
+    --light-font-weight: 300;
+    --border-radius: 8px;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --transition-speed: 0.3s;
+}
+
+/* --- Basic Reset & Body --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.7;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    font-weight: var(--base-font-weight);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure footer sticks to bottom */
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Header --- */
+.site-header {
+    background-color: var(--dark-color);
+    color: var(--white-color);
+    padding: 30px 0;
+    text-align: center;
+}
+
+.site-header h1 {
+    font-size: 2.8rem;
+    font-weight: var(--header-font-weight);
+    margin-bottom: 5px;
+    letter-spacing: -1px;
+}
+
+.site-header .subtitle {
+    font-size: 1.1rem;
+    font-weight: var(--light-font-weight);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* --- Navigation --- */
+.main-nav {
+    background-color: var(--white-color);
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #eee;
+}
+
+.main-nav .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Space between nav items */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.main-nav a {
+    text-decoration: none;
+    color: var(--primary-color);
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.main-nav a:hover,
+.main-nav a:focus { /* Added focus state for accessibility */
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    outline: none; /* Remove default focus outline if custom style is clear */
+}
+
+/* --- Main Content Area --- */
+.content-area {
+    padding: 40px 0;
+    flex-grow: 1; /* Allow main content to fill available space */
+}
+
+.content-section {
+    background-color: var(--white-color);
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.content-section h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: var(--dark-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 8px;
+    display: inline-block; /* Make border only as wide as text */
+}
+
+.content-section p {
+    margin-bottom: 15px;
+    color: #555; /* Slightly lighter text for paragraphs */
+}
+
+.content-section p:last-child {
+    margin-bottom: 0;
+}
+
+/* Info Card Specific Styles */
+.info-card {
+    display: flex;
+    gap: 20px; /* Space between cards */
+    justify-content: space-around; /* Distribute space */
+    flex-wrap: wrap; /* Allow wrapping */
+    padding: 20px; /* Slightly less padding */
+}
+
+.info-card-item {
+   flex: 1; /* Allow items to grow */
+   min-width: 200px; /* Minimum width before wrapping */
+   text-align: center;
+   padding: 20px;
+   border: 1px solid #eee;
+   border-radius: var(--border-radius);
+   background-color: #fdfdfd; /* Slightly off-white */
+}
+
+.info-card h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    border-bottom: none; /* Remove border for card titles */
+    color: var(--primary-color);
+}
+
+.version-number {
+    font-size: 2.5rem;
+    font-weight: var(--header-font-weight);
+    color: var(--dark-color);
+    margin-bottom: 5px;
+}
+
+.subtext { /* Style the paragraph with the subtext class */
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    font-weight: var(--light-font-weight);
+    font-style: italic;
+    margin-bottom: 0; /* Remove margin from subtext */
+}
+
+
+/* --- Footer --- */
+.site-footer {
+    background-color: var(--dark-color);
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    padding: 25px 0;
+    margin-top: auto; /* Pushes footer to bottom */
+    font-size: 0.9rem;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .site-header h1 {
+        font-size: 2.2rem;
+    }
+    .site-header .subtitle {
+        font-size: 1rem;
+    }
+    .content-section h2 {
+        font-size: 1.6rem;
+    }
+    .info-card {
+        flex-direction: column; /* Stack cards vertically */
+    }
+}
+
+@media (max-width: 600px) {
+    .main-nav .container {
+        flex-direction: column; /* Stack nav items vertically */
+        align-items: stretch; /* Make nav items full width */
+        gap: 10px;
+    }
+    .main-nav a {
+        text-align: center;
+    }
+     .container {
+        padding: 0 15px; /* Reduce side padding */
+    }
+    .content-section {
+        padding: 20px;
+    }
+}
